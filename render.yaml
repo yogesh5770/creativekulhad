@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: n8n-creative-kulhad
+    env: docker
+    dockerfilePath: Dockerfile # We can deploy directly using a Docker image or a simple single-line Dockerfile
+    plan: starter
+    healthCheckPath: /healthz
+    envVars:
+      - key: N8N_PORT
+        value: 5678
+      - key: N8N_PROTOCOL
+        value: https
+      - key: NODE_ENV
+        value: production
+      - key: GENERIC_TIMEZONE
+        value: Asia/Kolkata
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: n8n-db
+          property: host
+      - key: DB_POSTGRESDB_PORT
+        fromDatabase:
+          name: n8n-db
+          property: port
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: n8n-db
+          property: database
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: n8n-db
+          property: user
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: password
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+      - key: WEBHOOK_URL
+        value: https://n8n-creative-kulhad.onrender.com/ # Replace with actual Render service URL once generated
+    disk:
+      name: n8n-storage
+      mountPath: /home/node/.n8n
+      sizeGB: 1
+
+databases:
+  - name: n8n-db
+    plan: starter
+    postgresMajorVersion: 15

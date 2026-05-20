@@ -1,0 +1,177 @@
+{
+  "name": "Creative Kulhad Blueprint Orchestrator (Groq AI)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "creative-kulhad-blueprint",
+        "responseMode": "responseNode",
+        "options": {
+          "cors": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        240
+      ],
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-ai-enabled",
+              "leftValue": "={{ $env.GROQ_API_KEY ? 'true' : 'false' }}",
+              "transition": "equal",
+              "rightValue": "true"
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        240
+      ],
+      "id": "if-ai-configured",
+      "name": "Is AI Configured?"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert Chief Operating Officer (COO) and business systems architect for \"Creative Kulhad\", a premium digital marketing and full-service creative agency.\n\nYour task is to document and blueprint the following subjective business operation:\n\"{{ $json.operationName }}\"\n\nGenerate a highly detailed, professional, and actionable Operational Playbook in GitHub-Flavored Markdown. Use the following structured outline:\n\n# 📋 {{ $json.operationName }} — Operational Blueprint\n\n## 1. Objective & Strategic Scope\n[Define the business purpose, why this operation is critical, and the expected high-level outcome.]\n\n## 2. Step-by-Step Execution Workflow\n[Break down the operation into sequential steps or chronological phases. For each step, define what needs to be done, who is responsible, and the expected output of that step.]\n\n## 3. Required Team Roles & Resources\n[List the specific roles involved (e.g. Account Manager, Copywriter, Senior Graphic Designer) and the tools required to complete the operation.]\n\n## 4. Key Performance Indicators (KPIs)\n[Provide 3-4 measurable metrics that will define whether this operation was executed successfully (e.g., turnaround time, client satisfaction score, revisions required).]\n\n## 5. Quality Control Checklist\nFormat this exactly as a markdown task list with '[ ]' checkboxes so the dashboard can render it as an interactive checklist. Provide 5-6 granular quality checks:\n- [ ] [Check item 1]\n- [ ] [Check item 2]\n- [ ] [Check item 3]\n- [ ] [Check item 4]\n- [ ] [Check item 5]\n- [ ] [Check item 6]\n\nEnsure the tone is extremely sharp, premium, and professional.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.basicAgent",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        140
+      ],
+      "id": "ai-agent-orchestrator",
+      "name": "AI Agent Orchestrator"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        480,
+        340
+      ],
+      "id": "groq-model",
+      "name": "Groq Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const operation = $json.operationName || \"Generic Creative Operation\";\n\n// A highly advanced dynamic local engine template to show instant orchestration without needing cloud API keys\nconst markdownOutput = `# 📋 ${operation} — Operational Blueprint\n\n> [!NOTE]\n> **Dynamic Fallback Active:** This blueprint was orchestrated locally using the Creative Kulhad Dynamic Template Engine. To enable real-time custom AI generation, plug your Groq API key into your n8n container environment.\n\n## 1. Objective & Strategic Scope\nThe primary objective of **${operation}** is to establish a standardized, highly efficient workflow that ensures maximum quality, reduces communication overhead, and aligns the Creative Kulhad execution team with the brand's core KPIs.\n\n## 2. Step-by-Step Execution Workflow\n\n### Phase 1: Initiation & Resource Allocation\n* **Step 1.1:** Gather initial briefs, brand assets, and historical campaign data.\n* **Step 1.2:** Assign roles (Lead Designer, Strategy Lead, Account Manager) and set timelines in the workspace board.\n* **Step 1.3:** Conduct a internal kickoff meeting to align on the creative goals.\n\n### Phase 2: Creative Concept & Design Ideation\n* **Step 2.1:** Draft initial concepts (2-3 structural angles) and review with the Creative Director.\n* **Step 2.2:** Build high-fidelity interactive wireframes or copy frameworks.\n* **Step 2.3:** Apply the brand design system guidelines (colors, typography, HSL variables).\n\n### Phase 3: Review, Quality Control & Launch\n* **Step 3.1:** Execute internal checklist audits to find inconsistencies.\n* **Step 3.2:** Deliver high-fidelity designs or campaigns to client for collaborative feedback.\n* **Step 3.3:** Apply adjustments and officially launch the active asset.\n\n## 3. Required Team Roles & Resources\n* **Creative Director:** Oversees quality standards and thematic alignment.\n* **Operations Lead / Project Manager:** Tracks timelines, schedules checkpoints, and coordinates feedback.\n* **Specialized Designer / Copywriter:** Executes the technical design, messaging architecture, and final deliverables.\n* **Tools Required:** Figma (collaborative workspace), Slack/Discord (team alignment), and n8n (automation loops).\n\n## 4. Key Performance Indicators (KPIs)\n1. **First-Time Approval Rate:** Target >80% approval on the initial draft.\n2. **Turnaround Efficiency:** Complete the execution cycle within 4 business days.\n3. **Quality Alignment:** Maintain zero deviation from the client's brand design guidelines.\n\n## 5. Quality Control Checklist\n- [ ] Verify that all asset specifications match the client brief.\n- [ ] Check color palettes against official brand guidelines.\n- [ ] Proofread all text elements for correct grammar and brand tone.\n- [ ] Validate image and rendering resolution (export at minimum 2x for retina displays).\n- [ ] Confirm that backup files are saved in the central cloud directory.\n- [ ] Ensure that internal approvals have been documented in the project workspace.\n`;\n\nreturn {\n  blueprint: markdownOutput\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -20
+      ],
+      "id": "dynamic-local-fallback",
+      "name": "Dynamic Local Fallback"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        240
+      ],
+      "id": "webhook-response",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Is AI Configured?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is AI Configured?": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Orchestrator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dynamic Local Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Orchestrator": {
+      "main": [
+        [
+          {
+            "node": "webhook-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic Local Fallback": {
+      "main": [
+        [
+          {
+            "node": "webhook-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Orchestrator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "creative-kulhad-blueprint-orchestrator",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
