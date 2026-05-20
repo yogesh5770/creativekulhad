@@ -6,6 +6,8 @@ services:
     plan: starter
     healthCheckPath: /healthz
     envVars:
+      - key: PORT
+        value: 5678
       - key: N8N_PORT
         value: 5678
       - key: N8N_PROTOCOL
