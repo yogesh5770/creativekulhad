@@ -30,6 +30,14 @@ services:
         sync: false
       - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
         value: false
+      - key: DB_POSTGRESDB_SSL_ENABLED
+        value: true
+      - key: DB_POSTGRESDB_CONNECTION_TIMEOUT
+        value: 60000
+      - key: N8N_RUNNERS_GRANT_TOKEN_TTL
+        value: 120000
+      - key: N8N_PYTHON_ENABLED
+        value: false
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       - key: WEBHOOK_URL
