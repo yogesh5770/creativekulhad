@@ -39,7 +39,7 @@ services:
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       - key: WEBHOOK_URL
-        value: https://n8n-creative-kulhad.onrender.com/ # Replace with actual Render service URL once generated
+        value: https://creativekulhad.onrender.com/ # Your hosted Render service URL
     disk:
       name: n8n-storage
       mountPath: /home/node/.n8n
