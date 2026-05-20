@@ -18,26 +18,10 @@ services:
         value: Asia/Kolkata
       - key: DB_TYPE
         value: postgresdb
-      - key: DB_POSTGRESDB_HOST
-        fromDatabase:
-          name: n8n-db
-          property: host
-      - key: DB_POSTGRESDB_PORT
-        fromDatabase:
-          name: n8n-db
-          property: port
-      - key: DB_POSTGRESDB_DATABASE
-        fromDatabase:
-          name: n8n-db
-          property: database
-      - key: DB_POSTGRESDB_USER
-        fromDatabase:
-          name: n8n-db
-          property: user
-      - key: DB_POSTGRESDB_PASSWORD
-        fromDatabase:
-          name: n8n-db
-          property: password
+      - key: DB_POSTGRESDB_CONNECTION_STRING
+        sync: false
+      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+        value: false
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       - key: WEBHOOK_URL
@@ -46,8 +30,3 @@ services:
       name: n8n-storage
       mountPath: /home/node/.n8n
       sizeGB: 1
-
-databases:
-  - name: n8n-db
-    plan: starter
-    postgresMajorVersion: 15
